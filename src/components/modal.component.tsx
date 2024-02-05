@@ -1,11 +1,8 @@
 import { FieldValues, useForm } from 'react-hook-form'
-import { useMutation } from '@tanstack/react-query'
 import { useAppDispatch, useAppSelector } from '../utils/redux/hooks.ts'
 import { clearSongToEdit, close } from '../utils/redux/slices/modal.slice.ts'
 import { Box, Button } from 'rebass'
-import { SONG_LIST_FETCH_REQUESTED } from '../utils/redux/actions.ts'
-
-const API_URL = import.meta.env.VITE_API_URL
+import { SONG_CREATE_REQUESTED, SONG_UPDATE_REQUESTED } from '../utils/redux/actions.ts'
 
 export const Modal = () => {
   const dispatch = useAppDispatch()
@@ -15,44 +12,12 @@ export const Modal = () => {
     handleSubmit,
     formState: { errors },
   } = useForm()
-  const createMutation = useMutation({
-    mutationFn: async (values: FieldValues) => {
-      fetch(`${API_URL}/create`, {
-        method: 'POST',
-        headers: {
-          'content-type': 'application/json;charset=UTF-8',
-        },
-        body: JSON.stringify(values),
-      }).then(() => {
-        dispatch(() => close())
-      })
-    },
-    onSuccess: () => {
-      dispatch({ type: SONG_LIST_FETCH_REQUESTED })
-      handleCloseButtonClick()
-    },
-  })
-  const updateMutation = useMutation({
-    mutationFn: async (values: FieldValues) => {
-      await fetch(`${API_URL}/update/${values._id}`, {
-        method: 'PATCH',
-        headers: {
-          'content-type': 'application/json;charset=UTF-8',
-        },
-        body: JSON.stringify(values),
-      })
-    },
-    onSuccess: () => {
-      dispatch({ type: SONG_LIST_FETCH_REQUESTED })
-      handleCloseButtonClick()
-    },
-  })
 
   const onSubmit = (values: FieldValues) => {
     if (songToEdit) {
-      updateMutation.mutate(values)
+      dispatch({ type: SONG_UPDATE_REQUESTED, payload: values })
     } else {
-      createMutation.mutate(values)
+      dispatch({ type: SONG_CREATE_REQUESTED, payload: values })
     }
   }
   const handleCloseButtonClick = () => {
@@ -114,7 +79,7 @@ export const Modal = () => {
           type="button"
           onClick={handleCloseButtonClick}
         >
-          Cancel
+          Close
         </Button>
         <Button style={{ cursor: 'pointer' }} color="#FFFFEE" backgroundColor="#3D88F7" type="submit">
           Submit

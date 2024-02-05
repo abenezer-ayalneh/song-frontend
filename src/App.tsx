@@ -1,11 +1,10 @@
-import { useMutation, useQueries } from '@tanstack/react-query'
+import { useMutation } from '@tanstack/react-query'
 import { Song, Stat } from './utils/types.ts'
 import { useEffect } from 'react'
 import { Modal } from './components/modal.component.tsx'
 import { useAppDispatch, useAppSelector } from './utils/redux/hooks.ts'
 import { open, setSongToEdit } from './utils/redux/slices/modal.slice.ts'
 import { Box, Button, Text } from 'rebass'
-import { fetchSongList } from './utils/_requests.ts'
 import { SONG_LIST_FETCH_REQUESTED } from './utils/redux/actions.ts'
 
 const API_URL = import.meta.env.VITE_API_URL
@@ -34,18 +33,28 @@ function App() {
   }, [songToEdit])
 
   useEffect(() => {
-    dispatch({type: SONG_LIST_FETCH_REQUESTED})
+    dispatch({ type: SONG_LIST_FETCH_REQUESTED })
   }, [])
 
   return (
-    <Box width="100vw" height="100vh" display="flex" padding="2rem" style={{position: 'relative'}}>
-      <Box width="70%" display="flex" flexDirection="column" padding='0 2rem'>
-        <Box display="flex" justifyContent="space-between" alignItems='center'>
-          <Text fontSize='3rem' fontWeight='bold'>Song List</Text>
-          <Button style={{cursor: 'pointer'}} color='#FFFFEE' backgroundColor='#3D88F7' height='3rem' onClick={() => dispatch(open())}>Create</Button>
+    <Box width="100vw" height="100vh" display="flex" padding="2rem" style={{ position: 'relative' }}>
+      <Box width="70%" display="flex" flexDirection="column" padding="0 2rem">
+        <Box display="flex" justifyContent="space-between" alignItems="center">
+          <Text fontSize="3rem" fontWeight="bold">
+            Song List
+          </Text>
+          <Button
+            style={{ cursor: 'pointer' }}
+            color="#FFFFEE"
+            backgroundColor="#3D88F7"
+            height="3rem"
+            onClick={() => dispatch(open())}
+          >
+            Create
+          </Button>
         </Box>
         <table style={{ borderCollapse: 'separate', borderSpacing: '0 10px' }}>
-          <thead style={{backgroundColor: '#F9FAFB', height: '3rem'}}>
+          <thead style={{ backgroundColor: '#F9FAFB', height: '3rem' }}>
             <tr>
               <th style={{ fontSize: '1rem', fontWeight: 'normal', color: 'black' }}>Song</th>
               <th style={{ fontSize: '1rem', fontWeight: 'normal', color: 'black' }}>Artist</th>
@@ -84,7 +93,7 @@ function App() {
           </tbody>
         </table>
       </Box>
-      <Box width="30%" backgroundColor="#494953" padding="1rem 2rem" style={{ borderRadius: '1rem' }}>
+      <Box width="30%" backgroundColor="#494953" padding="1rem 2rem" overflow='scroll' style={{ borderRadius: '1rem' }}>
         <Text fontSize="3rem" fontWeight="bold">
           Stats
         </Text>
@@ -93,20 +102,20 @@ function App() {
             <table>
               <tbody>
                 <tr>
-                  <td>Total Songs</td>
-                  <td>{stats.totalSongs}</td>
+                  <td style={{width: '50%'}}>Total Songs</td>
+                  <td style={{width: '50%'}} align='left'>{stats.totalSongs}</td>
                 </tr>
                 <tr>
-                  <td>Total Artist</td>
-                  <td>{stats.totalArtists}</td>
+                  <td style={{width: '50%'}}>Total Artist</td>
+                  <td style={{width: '50%'}} align='left'>{stats.totalArtists}</td>
                 </tr>
                 <tr>
-                  <td>Total Albums</td>
-                  <td>{stats.totalAlbums}</td>
+                  <td style={{width: '50%'}}>Total Albums</td>
+                  <td style={{width: '50%'}} align='left'>{stats.totalAlbums}</td>
                 </tr>
                 <tr>
-                  <td>Total Genres</td>
-                  <td>{stats.totalGenres}</td>
+                  <td style={{width: '50%'}}>Total Genres</td>
+                  <td style={{width: '50%'}} align='left'>{stats.totalGenres}</td>
                 </tr>
               </tbody>
             </table>
@@ -128,13 +137,13 @@ function App() {
                   ))}
               </tbody>
             </table>
-            <br/>
+            <br />
             <table>
               <thead>
                 <tr>
-                  <th align='left'>Artist</th>
-                  <th align='left'>Number of Songs</th>
-                  <th align='left'>Number of Albums</th>
+                  <th align="left">Artist</th>
+                  <th align="left">Number of Songs</th>
+                  <th align="left">Number of Albums</th>
                 </tr>
               </thead>
               <tbody>
@@ -148,12 +157,12 @@ function App() {
                   ))}
               </tbody>
             </table>
-            <br/>
+            <br />
             <table>
               <thead>
                 <tr>
-                  <th align='left'>Genre</th>
-                  <th align='left'>Number of Songs</th>
+                  <th align="left">Genre</th>
+                  <th align="left">Number of Songs</th>
                 </tr>
               </thead>
               <tbody>

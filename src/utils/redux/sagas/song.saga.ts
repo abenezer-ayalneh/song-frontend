@@ -1,13 +1,17 @@
 import { all, call, put, takeEvery } from 'redux-saga/effects'
-import { fetchSongList, fetchStat } from '../../_requests.ts'
+import { createSong, fetchSongList, fetchStat, updateSong } from '../../_requests.ts'
 import { Song, Stat } from '../../types.ts'
 import {
+  SONG_CREATE_FAILED, SONG_CREATE_REQUESTED,
   SONG_LIST_FETCH_FAILED,
   SONG_LIST_FETCH_REQUESTED,
   SONG_STATS_FETCH_FAILED,
-  SONG_STATS_FETCH_REQUESTED,
+  SONG_STATS_FETCH_REQUESTED, SONG_UPDATE_FAILED, SONG_UPDATE_REQUESTED,
 } from '../actions.ts'
 import { addSongs, setStats } from '../slices/song.slice.ts'
+import { PayloadAction } from '@reduxjs/toolkit'
+import { FieldValues } from 'react-hook-form'
+import { close } from '../slices/modal.slice.ts'
 
 function* fetchSongListGenerator() {
   try {
@@ -36,6 +40,34 @@ function* fetchStatsSaga() {
   yield takeEvery(SONG_STATS_FETCH_REQUESTED, fetchStatsSagaGenerator)
 }
 
+function* createSongGenerator(action: PayloadAction<FieldValues>) {
+  try {
+    yield call(createSong, action.payload)
+    yield put({ type: SONG_LIST_FETCH_REQUESTED })
+    yield put(close())
+  } catch (e) {
+    yield put({ type: SONG_CREATE_FAILED })
+  }
+}
+
+function* createSongSaga() {
+  yield takeEvery(SONG_CREATE_REQUESTED, createSongGenerator)
+}
+
+function* updateSongGenerator(action: PayloadAction<FieldValues>) {
+  try {
+    yield call(updateSong, action.payload)
+    yield put({ type: SONG_LIST_FETCH_REQUESTED })
+    yield put(close())
+  } catch (e) {
+    yield put({ type: SONG_UPDATE_FAILED })
+  }
+}
+
+function* updateSongSaga() {
+  yield takeEvery(SONG_UPDATE_REQUESTED, updateSongGenerator)
+}
+
 export default function* rootSongSaga() {
-  yield all([fetchSongListSaga(), fetchStatsSaga()])
+  yield all([fetchSongListSaga(), fetchStatsSaga(), createSongSaga(), updateSongSaga()])
 }
