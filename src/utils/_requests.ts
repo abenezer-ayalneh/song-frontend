@@ -22,7 +22,7 @@ export const fetchStat = async () => {
 }
 
 export const createSong = async (values: FieldValues) => {
-  console.log({values})
+  console.log({ values })
   try {
     await fetch(`${API_URL}/create`, {
       method: 'POST',
@@ -45,6 +45,14 @@ export const updateSong = async (values: FieldValues) => {
       },
       body: JSON.stringify(values),
     })
+  } catch (e) {
+    return console.error(e)
+  }
+}
+
+export const deleteSong = async (id: string) => {
+  try {
+    await fetch(`${API_URL}/delete/${id}`, { method: 'DELETE' })
   } catch (e) {
     return console.error(e)
   }

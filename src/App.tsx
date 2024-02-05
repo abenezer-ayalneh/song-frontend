@@ -1,13 +1,10 @@
-import { useMutation } from '@tanstack/react-query'
-import { Song, Stat } from './utils/types.ts'
+import { Song } from './utils/types.ts'
 import { useEffect } from 'react'
 import { Modal } from './components/modal.component.tsx'
 import { useAppDispatch, useAppSelector } from './utils/redux/hooks.ts'
 import { open, setSongToEdit } from './utils/redux/slices/modal.slice.ts'
 import { Box, Button, Text } from 'rebass'
-import { SONG_LIST_FETCH_REQUESTED } from './utils/redux/actions.ts'
-
-const API_URL = import.meta.env.VITE_API_URL
+import { SONG_DELETE_REQUESTED, SONG_LIST_FETCH_REQUESTED } from './utils/redux/actions.ts'
 
 function App() {
   const isModalOpen = useAppSelector((state) => state.modal.isOpen)
@@ -16,14 +13,12 @@ function App() {
   const stats = useAppSelector((state) => state.song.stats)
   const dispatch = useAppDispatch()
 
-  const handleDeleteSong = useMutation({
-    mutationFn: async (id: string) => {
-      await fetch(`${API_URL}/delete/${id}`, { method: 'DELETE' }).then((res) => res.json() as Promise<Stat>)
-    },
-  })
-
   const handleEditSong = (song: Song) => {
     dispatch(setSongToEdit(song))
+  }
+
+  const handleDeleteSong = (id: string) => {
+    dispatch({ type: SONG_DELETE_REQUESTED, payload: id })
   }
 
   useEffect(() => {
@@ -83,7 +78,7 @@ function App() {
                     style={{ cursor: 'pointer' }}
                     color="#FFFFEE"
                     backgroundColor="#3D88F7"
-                    onClick={() => handleDeleteSong.mutate(row._id)}
+                    onClick={() => handleDeleteSong(row._id)}
                   >
                     Delete
                   </Button>
@@ -93,7 +88,7 @@ function App() {
           </tbody>
         </table>
       </Box>
-      <Box width="30%" backgroundColor="#494953" padding="1rem 2rem" overflow='scroll' style={{ borderRadius: '1rem' }}>
+      <Box width="30%" backgroundColor="#494953" padding="1rem 2rem" overflow="scroll" style={{ borderRadius: '1rem' }}>
         <Text fontSize="3rem" fontWeight="bold">
           Stats
         </Text>
@@ -102,20 +97,28 @@ function App() {
             <table>
               <tbody>
                 <tr>
-                  <td style={{width: '50%'}}>Total Songs</td>
-                  <td style={{width: '50%'}} align='left'>{stats.totalSongs}</td>
+                  <td style={{ width: '50%' }}>Total Songs</td>
+                  <td style={{ width: '50%' }} align="left">
+                    {stats.totalSongs}
+                  </td>
                 </tr>
                 <tr>
-                  <td style={{width: '50%'}}>Total Artist</td>
-                  <td style={{width: '50%'}} align='left'>{stats.totalArtists}</td>
+                  <td style={{ width: '50%' }}>Total Artist</td>
+                  <td style={{ width: '50%' }} align="left">
+                    {stats.totalArtists}
+                  </td>
                 </tr>
                 <tr>
-                  <td style={{width: '50%'}}>Total Albums</td>
-                  <td style={{width: '50%'}} align='left'>{stats.totalAlbums}</td>
+                  <td style={{ width: '50%' }}>Total Albums</td>
+                  <td style={{ width: '50%' }} align="left">
+                    {stats.totalAlbums}
+                  </td>
                 </tr>
                 <tr>
-                  <td style={{width: '50%'}}>Total Genres</td>
-                  <td style={{width: '50%'}} align='left'>{stats.totalGenres}</td>
+                  <td style={{ width: '50%' }}>Total Genres</td>
+                  <td style={{ width: '50%' }} align="left">
+                    {stats.totalGenres}
+                  </td>
                 </tr>
               </tbody>
             </table>

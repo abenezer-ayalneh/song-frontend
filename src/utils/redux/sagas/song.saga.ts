@@ -1,12 +1,17 @@
 import { all, call, put, takeEvery } from 'redux-saga/effects'
-import { createSong, fetchSongList, fetchStat, updateSong } from '../../_requests.ts'
+import { createSong, deleteSong, fetchSongList, fetchStat, updateSong } from '../../_requests.ts'
 import { Song, Stat } from '../../types.ts'
 import {
-  SONG_CREATE_FAILED, SONG_CREATE_REQUESTED,
+  SONG_CREATE_FAILED,
+  SONG_CREATE_REQUESTED,
+  SONG_DELETE_FAILED,
+  SONG_DELETE_REQUESTED,
   SONG_LIST_FETCH_FAILED,
   SONG_LIST_FETCH_REQUESTED,
   SONG_STATS_FETCH_FAILED,
-  SONG_STATS_FETCH_REQUESTED, SONG_UPDATE_FAILED, SONG_UPDATE_REQUESTED,
+  SONG_STATS_FETCH_REQUESTED,
+  SONG_UPDATE_FAILED,
+  SONG_UPDATE_REQUESTED,
 } from '../actions.ts'
 import { addSongs, setStats } from '../slices/song.slice.ts'
 import { PayloadAction } from '@reduxjs/toolkit'
@@ -68,6 +73,19 @@ function* updateSongSaga() {
   yield takeEvery(SONG_UPDATE_REQUESTED, updateSongGenerator)
 }
 
+function* deleteSongGenerator(action: PayloadAction<string>) {
+  try {
+    yield call(deleteSong, action.payload)
+    yield put({ type: SONG_LIST_FETCH_REQUESTED })
+  } catch (e) {
+    yield put({ type: SONG_DELETE_FAILED })
+  }
+}
+
+function* deleteSongSaga() {
+  yield takeEvery(SONG_DELETE_REQUESTED, deleteSongGenerator)
+}
+
 export default function* rootSongSaga() {
-  yield all([fetchSongListSaga(), fetchStatsSaga(), createSongSaga(), updateSongSaga()])
+  yield all([fetchSongListSaga(), fetchStatsSaga(), createSongSaga(), updateSongSaga(), deleteSongSaga()])
 }
