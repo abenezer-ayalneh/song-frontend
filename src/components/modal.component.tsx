@@ -1,8 +1,9 @@
 import { FieldValues, useForm } from 'react-hook-form'
 import { useMutation } from '@tanstack/react-query'
 import { useAppDispatch, useAppSelector } from '../utils/redux/hooks.ts'
-import { clearSongToEdit, close } from '../utils/redux/slices/songs.slice.ts'
+import { clearSongToEdit, close } from '../utils/redux/slices/modal.slice.ts'
 import { Box, Button } from 'rebass'
+import { SONG_LIST_FETCH_REQUESTED } from '../utils/redux/actions.ts'
 
 const API_URL = import.meta.env.VITE_API_URL
 
@@ -26,6 +27,9 @@ export const Modal = () => {
         dispatch(() => close())
       })
     },
+    onSuccess: () => {
+      dispatch({ type: SONG_LIST_FETCH_REQUESTED })
+    },
   })
   const updateMutation = useMutation({
     mutationFn: async (values: FieldValues) => {
@@ -36,6 +40,9 @@ export const Modal = () => {
         },
         body: JSON.stringify(values),
       })
+    },
+    onSuccess: () => {
+      dispatch({ type: SONG_LIST_FETCH_REQUESTED })
     },
   })
 

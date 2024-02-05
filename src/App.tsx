@@ -3,27 +3,20 @@ import { Song, Stat } from './utils/types.ts'
 import { useEffect } from 'react'
 import { Modal } from './components/modal.component.tsx'
 import { useAppDispatch, useAppSelector } from './utils/redux/hooks.ts'
-import { open, setSongToEdit } from './utils/redux/slices/songs.slice.ts'
+import { open, setSongToEdit } from './utils/redux/slices/modal.slice.ts'
 import { Box, Button, Text } from 'rebass'
+import { fetchSongList } from './utils/_requests.ts'
+import { SONG_LIST_FETCH_REQUESTED } from './utils/redux/actions.ts'
 
 const API_URL = import.meta.env.VITE_API_URL
 
 function App() {
   const isModalOpen = useAppSelector((state) => state.modal.isOpen)
   const songToEdit = useAppSelector((state) => state.modal.songToEdit)
+  const songs = useAppSelector((state) => state.song.songs)
+  const stats = useAppSelector((state) => state.song.stats)
   const dispatch = useAppDispatch()
-  const queries = useQueries({
-    queries: [
-      {
-        queryKey: ['fetchSongs'],
-        queryFn: () => fetch(`${API_URL}/list`).then((res) => res.json() as Promise<Song[]>),
-      },
-      {
-        queryKey: ['fetchStats'],
-        queryFn: () => fetch(`${API_URL}/stat`).then((res) => res.json() as Promise<Stat>),
-      },
-    ],
-  })
+
   const handleDeleteSong = useMutation({
     mutationFn: async (id: string) => {
       await fetch(`${API_URL}/delete/${id}`, { method: 'DELETE' }).then((res) => res.json() as Promise<Stat>)
@@ -35,11 +28,14 @@ function App() {
   }
 
   useEffect(() => {
-    // setShowModal(Boolean(songToEdit))
     if (songToEdit) {
       dispatch(open())
     }
   }, [songToEdit])
+
+  useEffect(() => {
+    dispatch({type: SONG_LIST_FETCH_REQUESTED})
+  }, [])
 
   return (
     <Box width="100vw" height="100vh" display="flex" padding="2rem" style={{position: 'relative'}}>
@@ -59,7 +55,7 @@ function App() {
             </tr>
           </thead>
           <tbody>
-            {queries[0].data?.map((row: Song) => (
+            {songs.map((row: Song) => (
               <tr key={row._id}>
                 <td align="center">{row.title}</td>
                 <td align="center">{row.artist}</td>
@@ -92,25 +88,25 @@ function App() {
         <Text fontSize="3rem" fontWeight="bold">
           Stats
         </Text>
-        {queries[1].data && (
+        {stats && (
           <Box display="flex" flexDirection="column">
             <table>
               <tbody>
                 <tr>
                   <td>Total Songs</td>
-                  <td>{queries[1].data.totalSongs}</td>
+                  <td>{stats.totalSongs}</td>
                 </tr>
                 <tr>
                   <td>Total Artist</td>
-                  <td>{queries[1].data.totalArtists}</td>
+                  <td>{stats.totalArtists}</td>
                 </tr>
                 <tr>
                   <td>Total Albums</td>
-                  <td>{queries[1].data.totalAlbums}</td>
+                  <td>{stats.totalAlbums}</td>
                 </tr>
                 <tr>
                   <td>Total Genres</td>
-                  <td>{queries[1].data.totalGenres}</td>
+                  <td>{stats.totalGenres}</td>
                 </tr>
               </tbody>
             </table>
@@ -123,8 +119,8 @@ function App() {
                 </tr>
               </thead>
               <tbody>
-                {queries[1].data?.numberOfSongsInEachAlbum &&
-                  queries[1].data?.numberOfSongsInEachAlbum.map((value, index) => (
+                {stats?.numberOfSongsInEachAlbum &&
+                  stats?.numberOfSongsInEachAlbum.map((value, index) => (
                     <tr key={index}>
                       <td>{value._id}</td>
                       <td>{value.songs}</td>
@@ -142,8 +138,8 @@ function App() {
                 </tr>
               </thead>
               <tbody>
-                {queries[1].data?.songsAndAlbumsOfEveryArtist &&
-                  queries[1].data?.songsAndAlbumsOfEveryArtist.map((value, index) => (
+                {stats?.songsAndAlbumsOfEveryArtist &&
+                  stats?.songsAndAlbumsOfEveryArtist.map((value, index) => (
                     <tr key={index}>
                       <td>{value._id}</td>
                       <td>{value.songs}</td>
@@ -161,8 +157,8 @@ function App() {
                 </tr>
               </thead>
               <tbody>
-                {queries[1].data?.songsInEveryGenre &&
-                  queries[1].data?.songsInEveryGenre.map((value, index) => (
+                {stats?.songsInEveryGenre &&
+                  stats?.songsInEveryGenre.map((value, index) => (
                     <tr key={index}>
                       <td>{value._id}</td>
                       <td>{value.songs}</td>
