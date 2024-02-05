@@ -1,14 +1,17 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import type { RootState } from '../store'
+import { Song } from '../../types.ts'
 
 // Define a type for the slice state
 interface ModalState {
   isOpen: boolean
+  songToEdit: Song | undefined
 }
 
 // Define the initial state using that type
 const initialState: ModalState = {
   isOpen: false,
+  songToEdit: undefined,
 }
 
 export const modalSlice = createSlice({
@@ -21,10 +24,16 @@ export const modalSlice = createSlice({
     close: (state) => {
       state.isOpen = false
     },
+    setSongToEdit: (state, action: PayloadAction<Song>) => {
+      state.songToEdit = action.payload
+    },
+    clearSongToEdit: (state) => {
+      state.songToEdit = undefined
+    },
   },
 })
 
-export const { open, close } = modalSlice.actions
+export const { open, close, setSongToEdit, clearSongToEdit } = modalSlice.actions
 
 export const selectModal = (state: RootState) => state.modal.isOpen
 
