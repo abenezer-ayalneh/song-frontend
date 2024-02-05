@@ -42,24 +42,14 @@ function App() {
   }, [songToEdit])
 
   return (
-    <Box width="100vw" height="100vh" display="flex" padding="2rem" style={{ position: 'relative' }}>
-      <Box width="70%" display="flex" flexDirection="column" padding="0 2rem">
-        <Box display="flex" justifyContent="space-between" alignItems="center">
-          <Text fontSize="3rem" fontWeight="bold">
-            Song List
-          </Text>
-          <Button
-            style={{ cursor: 'pointer' }}
-            color="#FFFFEE"
-            backgroundColor="#3D88F7"
-            height="3rem"
-            onClick={() => dispatch(open())}
-          >
-            Create
-          </Button>
+    <Box width="100vw" height="100vh" display="flex" padding="2rem" style={{position: 'relative'}}>
+      <Box width="70%" display="flex" flexDirection="column" padding='0 2rem'>
+        <Box display="flex" justifyContent="space-between" alignItems='center'>
+          <Text fontSize='3rem' fontWeight='bold'>Song List</Text>
+          <Button style={{cursor: 'pointer'}} color='#FFFFEE' backgroundColor='#3D88F7' height='3rem' onClick={() => dispatch(open())}>Create</Button>
         </Box>
         <table style={{ borderCollapse: 'separate', borderSpacing: '0 10px' }}>
-          <thead style={{ backgroundColor: '#F9FAFB', height: '3rem' }}>
+          <thead style={{backgroundColor: '#F9FAFB', height: '3rem'}}>
             <tr>
               <th style={{ fontSize: '1rem', fontWeight: 'normal', color: 'black' }}>Song</th>
               <th style={{ fontSize: '1rem', fontWeight: 'normal', color: 'black' }}>Artist</th>
@@ -142,13 +132,13 @@ function App() {
                   ))}
               </tbody>
             </table>
-            <br />
+            <br/>
             <table>
               <thead>
                 <tr>
-                  <th align="left">Artist</th>
-                  <th align="left">Number of Songs</th>
-                  <th align="left">Number of Albums</th>
+                  <th align='left'>Artist</th>
+                  <th align='left'>Number of Songs</th>
+                  <th align='left'>Number of Albums</th>
                 </tr>
               </thead>
               <tbody>
@@ -162,12 +152,12 @@ function App() {
                   ))}
               </tbody>
             </table>
-            <br />
+            <br/>
             <table>
               <thead>
                 <tr>
-                  <th align="left">Genre</th>
-                  <th align="left">Number of Songs</th>
+                  <th align='left'>Genre</th>
+                  <th align='left'>Number of Songs</th>
                 </tr>
               </thead>
               <tbody>
