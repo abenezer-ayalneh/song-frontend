@@ -29,6 +29,7 @@ export const Modal = () => {
     },
     onSuccess: () => {
       dispatch({ type: SONG_LIST_FETCH_REQUESTED })
+      handleCloseButtonClick()
     },
   })
   const updateMutation = useMutation({
@@ -43,6 +44,7 @@ export const Modal = () => {
     },
     onSuccess: () => {
       dispatch({ type: SONG_LIST_FETCH_REQUESTED })
+      handleCloseButtonClick()
     },
   })
 
@@ -53,7 +55,7 @@ export const Modal = () => {
       createMutation.mutate(values)
     }
   }
-  const handleCancelButtonClick = () => {
+  const handleCloseButtonClick = () => {
     dispatch(close())
     dispatch(clearSongToEdit())
   }
@@ -110,7 +112,7 @@ export const Modal = () => {
           color="#FFFFEE"
           backgroundColor="#8888FF"
           type="button"
-          onClick={handleCancelButtonClick}
+          onClick={handleCloseButtonClick}
         >
           Cancel
         </Button>
