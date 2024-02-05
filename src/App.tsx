@@ -47,7 +47,7 @@ function App() {
       <Box width="70%" display="flex" flexDirection="column" padding='0 2rem'>
         <Box display="flex" justifyContent="space-between" alignItems='center'>
           <Text fontSize='3rem' fontWeight='bold'>Song List</Text>
-          <Button color='#FFFFEE' backgroundColor='#3D88F7' height='3rem' onClick={() => dispatch(open())}>Create</Button>
+          <Button style={{cursor: 'pointer'}} color='#FFFFEE' backgroundColor='#3D88F7' height='3rem' onClick={() => dispatch(open())}>Create</Button>
         </Box>
         <table style={{ borderCollapse: 'separate', borderSpacing: '0 10px' }}>
           <thead style={{backgroundColor: '#F9FAFB', height: '3rem'}}>
@@ -67,8 +67,8 @@ function App() {
                 <td align='center'>{row.album}</td>
                 <td align='center'>{row.genre}</td>
                 <td style={{display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '1rem'}}>
-                  <Button color='#FFFFEE' backgroundColor='#3D88F7' onClick={() => handleEditSong(row)}>Edit</Button>
-                  <Button color='#FFFFEE' backgroundColor='#3D88F7' onClick={() => handleDeleteSong.mutate(row._id)}>Delete</Button>
+                  <Button style={{cursor: 'pointer'}} color='#FFFFEE' backgroundColor='#3D88F7' onClick={() => handleEditSong(row)}>Edit</Button>
+                  <Button style={{cursor: 'pointer'}} color='#FFFFEE' backgroundColor='#3D88F7' onClick={() => handleDeleteSong.mutate(row._id)}>Delete</Button>
                 </td>
               </tr>
             ))}
@@ -167,7 +167,7 @@ function App() {
           alignItems="center"
           backgroundColor="#00000070"
           style={{
-            position: 'absolute',
+            position: 'fixed',
             zIndex: '2',
           }}
         >
