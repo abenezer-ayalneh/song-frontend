@@ -1,4 +1,27 @@
 # Song frontend
+## Setup
+1. Clone the project
+```shell
+git clone git@github.com:abenezer-ayalneh/song-frontend.git
+```
+2. Checkout the ```main``` branch
+```shell
+git checkout main
+```
+3. Copy the ```.env.example``` file to ```.env``` file
+```shell
+cp .env.example .env
+```
+4. Install packages
+```shell
+npm install
+```
+5. Run the development server
+```shell
+npm run dev
+```
+
+## Task
 The frontend part of your app should primarily show a list of songs and enable clients to
 create, update, and delete songs. In addition, it should have a section where the statistics
 data is shown. It should utilize the backend Rest API you built to fulfill the functionalities.
